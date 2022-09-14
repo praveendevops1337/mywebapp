@@ -1,12 +1,14 @@
-FROM tomcat:8.5
-MAINTAINER Tung Nguyen <tongueroo@gmail.com>
-RUN apt-get update && \
-  apt-get install -y \
-    net-tools \
-    tree \
-    vim && \
-  rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get purge
-RUN echo "export JAVA_OPTS=\"-Dapp.env=staging\"" > /usr/local/tomcat/bin/setenv.sh
-COPY pkg/demo.war /usr/local/tomcat/webapps/demo.war
-EXPOSE 8080
-CMD ["catalina.sh", "run"]
+FROM openjdk:8-jdk-alpine3.7 AS builder
+RUN java -version
+COPY . /usr/src/myapp/
+WORKDIR /usr/src/myapp/
+RUN apk --no-cache add maven && mvn --version
+RUN mvn package
+
+# Stage 2 (to create a downsized "container executable", ~87MB)
+FROM openjdk:8-jre-alpine3.7
+WORKDIR /root/
+COPY --from=builder /usr/src/myapp/target/app.jar .
+
+EXPOSE 8123
+ENTRYPOINT ["java", "-jar", "./app.jar"]
