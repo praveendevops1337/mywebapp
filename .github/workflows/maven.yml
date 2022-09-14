@@ -37,8 +37,7 @@ jobs:
             docker build . --file Dockerfile --tag my-image-name:latest
             docker images
             docker login
-            #docker push praveendevops1337/github_actions_latest:$(date +%s)
-            docker push praveendevops1337/github_actions_latest:latest
+            docker push praveendevops1337/github_actions_latest:my-image-name:latest
             
       
     
