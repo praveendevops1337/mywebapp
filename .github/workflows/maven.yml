@@ -35,11 +35,17 @@ jobs:
     - name: Build the Docker image
       run: |
             docker build . --file Dockerfile --tag my-image-name:latest
-            docker images
-            docker login
-            docker push praveendevops1337/github_actions_latest:my-image-name:latest
-            
-      
+    
+    - name: checking docker images  
+      run: docker images
+  
+    - name: docker tagging image
+      run: |
+        docker tag my-image-name:latest praveendevops1337/my-image-name:latest
+          
+    - name: pushing docker image to dockerhub
+      run: |
+        docker push praveendevops1337/my-image-name:latest
     
      
 
