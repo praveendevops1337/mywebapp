@@ -38,7 +38,7 @@ jobs:
             docker images
             docker login
             #docker push praveendevops1337/github_actions_latest:$(date +%s)
-            docker push my-image-name:latest
+            docker push praveendevops1337/github_actions_latest:latest
             
       
     
