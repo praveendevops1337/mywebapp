@@ -36,7 +36,7 @@ jobs:
       run: |
             docker build . --file Dockerfile --tag my-image-name:$(date +%s)
             docker images
-            docker push praveendevops1337/github_actions_latest:my-image-name:$(date +%s)
+            docker push praveendevops1337/github_actions_latest:$(date +%s)
             
       
     
