@@ -1,15 +1,30 @@
-FROM openjdk:8-jdk-alpine3.7 AS builder
-RUN java -version
-COPY . /usr/src/myapp/
-WORKDIR /usr/src/myapp/
-RUN apk --no-cache add maven && mvn --version
-RUN mvn package
+FROM amazonlinux:latest
 
-# Stage 2 (to create a downsized "container executable", ~87MB)
-FROM openjdk:8-jre-alpine3.7
-WORKDIR /root/
-COPY --from=builder /usr/src/myapp/target/demo.war .
+# Install dependencies
+RUN yum update -y && \
+    yum install -y httpd && \
+    yum search wget && \
+    yum install wget -y && \
+    yum install unzip -y
 
-#EXPOSE 8123
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "./demo.war"]
+# change directory
+RUN cd /var/www/html
+
+# download webfiles
+RUN wget https://github.com/azeezsalu/techmax/archive/refs/heads/main.zip
+
+# unzip folder
+RUN unzip main.zip
+
+# copy files into html directory
+RUN cp -r techmax-main/* /var/www/html/
+
+# remove unwanted folder
+RUN rm -rf techmax-main main.zip
+
+# exposes port 80 on the container
+EXPOSE 80
+
+# set the default application that will start when the container start
+ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+~                                                    
