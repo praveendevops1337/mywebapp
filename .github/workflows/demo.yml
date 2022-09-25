@@ -12,7 +12,7 @@ env:
 
 jobs:
  release:
-  name: Release
+  name: Release.
   runs-on: ubuntu-latest
   steps:
    - name: Cancel Previous Runs
